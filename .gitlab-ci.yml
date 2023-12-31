@@ -1,6 +1,7 @@
 stages:
   - build
   - test_stage
+  - deploy_stage
 build:
   stage: build
   image: openjdk:12-alpine
@@ -16,8 +17,14 @@ smoke test:
   before_script:
     - apk --no-cache add curl
   script:
-    - java -jar ./build/libs/cars-api.jar & #Run in background
+    - java -jar ./build/libs/cars-api.jar & #Run the application and in background
     - sleep 25
     - curl http://localhost:5000/actuator/health | grep "UP"
     ## Calling end point to check if application up or not
     ## this url was obtained from postman application Health GET-baseurl
+deploy:
+    stage: deploy_stage
+    image: amazon/aws-cli
+    script:
+      - aws configure set region us-east-1
+      - aws cp ./build/libs/cars-api.jar s3://$S3_BUCKET/cars-api.jar

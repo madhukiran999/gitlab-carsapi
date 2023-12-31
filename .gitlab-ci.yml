@@ -24,7 +24,9 @@ smoke test:
     ## this url was obtained from postman application Health GET-baseurl
 deploy:
     stage: deploy_stage
-    image: amazon/aws-cli
+    image:
+      name: amazon/aws-cli
+      entrypoint: [""]
     script:
       - aws configure set region us-east-1
       - aws cp ./build/libs/cars-api.jar s3://$S3_BUCKET/cars-api.jar

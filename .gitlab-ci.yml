@@ -9,3 +9,14 @@ build:
   artifacts:
     paths:
      - ./build/libs/
+smoke test:
+  stage: test stage
+  image: openjdk:12-alpine
+  before_script:
+    - apk --no-cache add curl
+  script:
+    - java -jar ./build/libs/car-api.jar #Run in background
+    - sleep 25
+    - curl http://localhost:5000/actuator/health | grep "UP"
+    ## Calling end point to check if application up or not
+    ## this url was obtained from postman application Health GET-baseurl

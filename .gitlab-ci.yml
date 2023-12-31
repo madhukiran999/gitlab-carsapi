@@ -29,4 +29,4 @@ deploy:
       entrypoint: [""]
     script:
       - aws configure set region us-east-1
-      - aws cp ./build/libs/cars-api.jar s3://$S3_BUCKET/cars-api.jar
+      - aws s3 cp ./build/libs/cars-api.jar s3://$S3_BUCKET/cars-api.jar

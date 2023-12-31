@@ -9,9 +9,10 @@ build:
   stage: build
   image: openjdk:12-alpine
   script:
-    -  sed -i "/CI_PIPELINE_IID/$CI_PIPELINE_IID/g" ./src/main/resources/application.yml
-    -  sed -i "/CI_COMMIT_SHORT_SHA/$CI_COMMIT_SHORT_SHA/g" ./src/main/resources/application.yml
-    -  sed -i "/CI_COMMIT_BRANCH/$CI_COMMIT_BRANCH/g" ./src/main/resources/application.yml # these 3 Varibales appear postman info end point
+    - sed -i "s/CI_PIPELINE_IID/$CI_PIPELINE_IID/" ./src/main/resources/application.yml
+    - sed -i "s/CI_COMMIT_SHORT_SHA/$CI_COMMIT_SHORT_SHA/" ./src/main/resources/application.yml
+    - sed -i "s/CI_COMMIT_BRANCH/$CI_COMMIT_BRANCH/" ./src/main/resources/application.yml
+      # these 3 Varibales appear postman info end point
     - ./gradlew build #Build command for java apps via gradle
     -  mv ./build/libs/cars-api.jar ./build/libs/$ARTIFACT_NAME  #Re-named artifact as we renamed artifact variable with env variable
     # earlier it it just cars-api.jar now it is cars-api-v$CI_PIPELINE_IID.jar

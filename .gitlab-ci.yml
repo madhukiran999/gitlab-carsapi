@@ -1,6 +1,6 @@
 stages:
   - build
-  - test
+  - test_stage
 build:
   stage: build
   image: openjdk:12-alpine
@@ -11,12 +11,12 @@ build:
     paths:
      - ./build/libs/
 smoke test:
-  stage: test stage
+  stage: test_stage
   image: openjdk:12-alpine
   before_script:
     - apk --no-cache add curl
   script:
-    - java -jar ./build/libs/car-api.jar #Run in background
+    - java -jar ./build/libs/cars-api.jar & #Run in background
     - sleep 25
     - curl http://localhost:5000/actuator/health | grep "UP"
     ## Calling end point to check if application up or not

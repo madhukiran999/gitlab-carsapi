@@ -1,0 +1,11 @@
+stages:
+  - build
+build:
+  stage: build
+  image: openjdk:12-alpine
+  script:
+
+    - ./gradlew build #Build command for java apps via gradle
+  artifacts:
+    paths:
+     - ./build/libs/

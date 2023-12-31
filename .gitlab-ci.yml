@@ -1,6 +1,6 @@
 stages:
   - build
-  - test
+  - test_stage
 build:
   stage: build
   image: openjdk:12-alpine
@@ -11,7 +11,7 @@ build:
     paths:
      - ./build/libs/
 smoke test:
-  stage: test stage
+  stage: test_stage
   image: openjdk:12-alpine
   before_script:
     - apk --no-cache add curl

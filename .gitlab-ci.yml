@@ -1,3 +1,4 @@
+image: openjdk:12-alpine
 variables:
   ARTIFACT_NAME: cars-api-v$CI_PIPELINE_IID.jar
   APP_NAME: cars-api
@@ -38,12 +39,14 @@ deploy:
     image:
       name: amazon/aws-cli
       entrypoint: [""]
-
-
-      # exttract info of production url from deploy stage
-    script:
+    before_script:
       - apk --no-cache add curl
       - apk --no-cache add jq
+
+
+  # exttract info of production url from deploy stage
+    script:
+
       - aws configure set region us-east-1
       - aws s3 cp ./build/libs/$ARTIFACT_NAME s3://$S3_BUCKET/$ARTIFACT_NAME
       - aws elasticbeanstalk create-application-version --application-name $APP_NAME --version-label $CI_PIPELINE_IID --source-bundle S3Bucket=$S3_BUCKET,S3Key=$ARTIFACT_NAME

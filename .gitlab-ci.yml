@@ -66,11 +66,10 @@ Unit_Test:
 deploy:
     stage: deploy_stage
     image:
-      name: banst/awscli
+      name: amazon/aws-cli
       entrypoint: [""]
     before_script:
-      - apk --no-cache add curl
-      - apk --no-cache add jq
+      - yum install -y jq
 
   # this command we use extract info of production url from deploy stage in json format
     script:
@@ -89,7 +88,7 @@ API_Testing:
     entrypoint: [""]
   script:
     - newman --version
-    -  - newman run "Cars API.postman_collection.json" --environment cars-api-env.postman_environment.json --reporters cli,htmlextra,junit --reporter-htmlextra-export "newman/report.html" --reporter-junit-export "newman/report.xml"
+    - newman run "Cars API.postman_collection.json" --environment cars-api-env.postman_environment.json --reporters cli,htmlextra,junit --reporter-htmlextra-export "newman/report.html" --reporter-junit-export "newman/report.xml"
   artifacts:
     paths:
       - newman/

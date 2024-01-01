@@ -18,7 +18,7 @@ build:
     - sed -i "s/CI_PIPELINE_IID/$CI_PIPELINE_IID/" ./src/main/resources/application.yml
     - sed -i "s/CI_COMMIT_SHORT_SHA/$CI_COMMIT_SHORT_SHA/" ./src/main/resources/application.yml
     - sed -i "s/CI_COMMIT_BRANCH/$CI_COMMIT_BRANCH/" ./src/main/resources/application.yml
-    # these 3 Varibales appear postman info end point
+    # these 3 Variables appear postman info end point
     - ./gradlew build #Build command for java apps via gradle
     - mv ./build/libs/cars-api.jar ./build/libs/$ARTIFACT_NAME
     #Re-named artifact as we renamed artifact variable with env variable
@@ -89,7 +89,7 @@ API_Testing:
     entrypoint: [""]
   script:
     - newman --version
-    -  - newman run "Cars API.postman_collection.json" --environment Production.postman_environment.json --reporters cli,htmlextra,junit --reporter-htmlextra-export "newman/report.html" --reporter-junit-export "newman/report.xml"
+    -  - newman run "Cars API.postman_collection.json" --environment cars-api-env.postman_environment.json --reporters cli,htmlextra,junit --reporter-htmlextra-export "newman/report.html" --reporter-junit-export "newman/report.xml"
   artifacts:
     paths:
       - newman/

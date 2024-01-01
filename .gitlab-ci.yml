@@ -6,6 +6,7 @@ stages:
   - build
   - test_stage
   - code_quality
+  - J_unit_test
   - deploy_stage
 
 build:
@@ -36,7 +37,7 @@ smoke test:
     - curl http://localhost:5000/actuator/health | grep "UP"
     ## Calling end point to check if application up or not
     ## this url was obtained from postman application Health GET-baseurl
-code_quality:
+code_quality: #Checks code quality against best practices
   stage: code_quality
   image: openjdk:12-alpine
   script:
@@ -44,7 +45,20 @@ code_quality:
   artifacts:
     when: always
     paths:
-      - build/reports/pmd
+      - build/reports/pmd  #Save the reports here
+Unit_Test:
+  stage: J_unit_test
+  image: openjdk:12-alpine
+  script:
+    - ./gradlew tests
+  artifacts:
+    when: always
+    paths:
+      - build/reports/tests  #HTML reports generated
+    reports:
+      junit: build/test-results/test #Reports are saved in j unit format
+
+
 deploy:
     stage: deploy_stage
     image:
@@ -54,7 +68,7 @@ deploy:
       - apk --no-cache add curl
       - apk --no-cache add jq
 
-  # extract info of production url from deploy stage
+  # this command we use extract info of production url from deploy stage in json format
     script:
 
       - aws configure set region us-east-1

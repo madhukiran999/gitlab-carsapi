@@ -40,7 +40,7 @@ smoke test:
     ## Calling end point to check if application up or not
     ## this url was obtained from postman application Health GET-baseurl
 code_quality: #Checks code quality against best practices
-  stage: code_quality
+  stage: test_stage
   image: openjdk:12-alpine
   script:
     - ./gradlew pmdMain pmdTest
@@ -49,29 +49,19 @@ code_quality: #Checks code quality against best practices
     paths:
       - build/reports/pmd  #Save the reports here
 Unit_Test:
-  stage: J_unit_test
+  stage: test_stage
   image: openjdk:12-alpine
   script:
     - ./gradlew test
   artifacts:
     when: always
     paths:
-      - ./build/reports/tests/*.html  #HTML reports generated
+      - ./build/reports/tests  #HTML reports generated
     reports:
       junit: ./build/test-results/test/*.xml #Reports are saved in j unit format
 #######################
-unit tests:
-  stage: test
-  image: openjdk:12-alpine
-  script:
-    - ./gradlew test
-  artifacts:
-    when: always
-    paths:
-      - build/reports/tests
-    reports:
-      junit: build/test-results/test/*.xml
-#################
+
+
 
 deploy:
     stage: deploy_stage

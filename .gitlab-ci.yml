@@ -8,6 +8,8 @@ stages:
   - code_quality
   - J_unit_test
   - deploy_stage
+  - API_Testing
+  - publishing
 
 build:
   stage: build
@@ -91,4 +93,24 @@ deploy:
       - curl http://$CNAME/actuator/health | grep "UP"
       - curl http://$CNAME/actuator/info | grep "$CI_PIPELINE_IID"
 API_Testing:
+  stage: API_Testing
+  image:
+    name: vdespa/newman # this we used as postman doesnt have cli to interact to test collection
+    entrypoint: [""]
+  script:
+    - newman --version
+    -  - newman run "Cars API.postman_collection.json" --environment Production.postman_environment.json --reporters cli,htmlextra,junit --reporter-htmlextra-export "newman/report.html" --reporter-junit-export "newman/report.xml"
+  artifacts:
+    paths:
+      - newman/
+    reports:
+      junit: newman/report.xml
 
+publishing:
+  stage: publishing
+  script:
+    - mkdir public
+    - mv newman/report.xml public/index.html
+  artifacts:
+    paths:
+      - public

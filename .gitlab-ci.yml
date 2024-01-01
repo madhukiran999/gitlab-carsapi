@@ -1,4 +1,4 @@
-image: openjdk:12-alpine
+
 variables:
   ARTIFACT_NAME: cars-api-v$CI_PIPELINE_IID.jar
   APP_NAME: cars-api
@@ -40,11 +40,12 @@ deploy:
       name: amazon/aws-cli
       entrypoint: [""]
     before_script:
-      - apk --no-cache add curl
-      - apk --no-cache add jq
+        - apt install jq -y
+        - apt install curl -y
 
 
-  # exttract info of production url from deploy stage
+
+  # extract info of production url from deploy stage
     script:
 
       - aws configure set region us-east-1

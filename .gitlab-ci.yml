@@ -50,14 +50,26 @@ Unit_Test:
   stage: J_unit_test
   image: openjdk:12-alpine
   script:
-    - ./gradlew tests
+    - ./gradlew test
   artifacts:
     when: always
     paths:
-      - build/reports/tests  #HTML reports generated
+      - ./build/reports/tests/*.html  #HTML reports generated
     reports:
-      junit: build/test-results/test/*.xml #Reports are saved in j unit format
-
+      junit: ./build/test-results/test/*.xml #Reports are saved in j unit format
+#######################
+unit tests:
+  stage: test
+  image: openjdk:12-alpine
+  script:
+    - ./gradlew test
+  artifacts:
+    when: always
+    paths:
+      - build/reports/tests
+    reports:
+      junit: build/test-results/test/*.xml
+#################
 
 deploy:
     stage: deploy_stage
@@ -78,3 +90,5 @@ deploy:
       - sleep 45
       - curl http://$CNAME/actuator/health | grep "UP"
       - curl http://$CNAME/actuator/info | grep "$CI_PIPELINE_IID"
+API_Testing:
+

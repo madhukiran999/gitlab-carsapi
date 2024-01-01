@@ -56,7 +56,7 @@ Unit_Test:
     paths:
       - build/reports/tests  #HTML reports generated
     reports:
-      junit: build/test-results/test #Reports are saved in j unit format
+      junit: build/test-results/test/*.xml #Reports are saved in j unit format
 
 
 deploy:

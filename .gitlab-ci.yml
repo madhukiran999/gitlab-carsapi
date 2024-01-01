@@ -40,7 +40,8 @@ deploy:
       entrypoint: [""]
     before_script:
       - apk --no-cache add curl
-      - apk --no-cache add jq  # exttract info of production url from deploy stage
+      - apk --no-cache add jq
+      # exttract info of production url from deploy stage
     script:
       - aws configure set region us-east-1
       - aws s3 cp ./build/libs/$ARTIFACT_NAME s3://$S3_BUCKET/$ARTIFACT_NAME

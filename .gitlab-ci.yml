@@ -5,7 +5,9 @@ variables:
 stages:
   - build
   - test_stage
+  - code_quality
   - deploy_stage
+
 build:
   stage: build
   image: openjdk:12-alpine
@@ -34,16 +36,23 @@ smoke test:
     - curl http://localhost:5000/actuator/health | grep "UP"
     ## Calling end point to check if application up or not
     ## this url was obtained from postman application Health GET-baseurl
+code_quality:
+  stage: code_quality
+  image: openjdk:12-alpine
+  script:
+    - ./gradlew pmdMain pmdTest
+  artifacts:
+    when: always
+    paths:
+      - build/reports/pmd
 deploy:
     stage: deploy_stage
     image:
-      name: amazon/aws-cli
+      name: banst/awscli
       entrypoint: [""]
     before_script:
-        - apt install jq -y
-        - apt install curl -y
-
-
+      - apk --no-cache add curl
+      - apk --no-cache add jq
 
   # extract info of production url from deploy stage
     script:
